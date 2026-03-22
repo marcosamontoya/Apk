@@ -1,0 +1,42 @@
+{
+  "name": "The Coach - Salud Masculina",
+  "short_name": "The Coach",
+  "description": "Tu entrenador personal de salud e intimidad. Programas de entrenamiento personalizados con progreso ilimitado.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e40af",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%231e40af' width='192' height='192'/><text x='50%' y='50%' font-size='80' fill='white' text-anchor='middle' dy='.3em'>💎</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%231e40af' width='512' height='512'/><text x='50%' y='50%' font-size='240' fill='white' text-anchor='middle' dy='.3em'>💎</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Comenzar Sesión",
+      "short_name": "Sesión",
+      "description": "Inicia tu sesión de entrenamiento",
+      "url": "/?mode=training",
+      "icons": []
+    },
+    {
+      "name": "Ver Progreso",
+      "short_name": "Progreso",
+      "description": "Revisa tu progreso",
+      "url": "/?mode=progress",
+      "icons": []
+    }
+  ],
+  "categories": ["health", "fitness"],
+  "prefer_related_applications": false
+}
