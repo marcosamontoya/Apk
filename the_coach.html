@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Coach - Salud Masculina</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #e5e7eb;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screen {
+            display: none;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* LOGIN */
+        .login-screen {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .login-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .login-box h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .login-box p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #3b82f6, #9333ea);
+            color: white;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        /* HOME */
+        .program-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .program-card:active {
+            transform: scale(0.98);
+        }
+
+        .program-card.blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .program-card.purple {
+            background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+        }
+
+        .program-card.orange {
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
+        }
+
+        .program-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .program-card h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .program-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* TRAINING */
+        .btn-back {
+            background: transparent;
+            color: #3b82f6;
+            text-align: left;
+            padding: 8px 0;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .training-header {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .training-header h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .training-header p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .day-selector {
+            display: flex;
+            gap: 6px;
+            margin-top: 15px;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .day-btn {
+            padding: 8px 10px;
+            border: none;
+            border-radius: 6px;
+            background: #e5e7eb;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .day-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .day-btn.rest {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .exercise-card {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            align-items: center;
+        }
+
+        .exercise-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .exercise-card.completed {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+        }
+
+        .exercise-check {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .exercise-card.completed .exercise-check {
+            background: #22c55e;
+            border-color: #22c55e;
+            color: white;
+        }
+
+        .exercise-info {
+            flex: 1;
+        }
+
+        .exercise-info h4 {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .exercise-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .rest-day {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #666;
+        }
+
+        .rest-day h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        /* DETAIL MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .modal-description {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .cycles-section {
+            background: #f0f9ff;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #3b82f6;
+        }
+
+        .cycles-section h3 {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .cycle-display {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .cycle-work {
+            background: #dbeafe;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #1e40af;
+            text-align: center;
+            flex: 1;
+        }
+
+        .cycle-rest {
+            background: #fed7aa;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #92400e;
+            text-align: center;
+            flex: 1;
+        }
+
+        .cycle-info {
+            background: #f3f4f6;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: center;
+            color: #666;
+            flex: 1;
+        }
+
+        .timer-box {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .timer-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .timer-display {
+            font-size: 48px;
+            font-weight: bold;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+
+        .timer-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .timer-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-buttons .btn {
+            flex: 1;
+        }
+
+        /* PROGRESS */
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .greeting {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .greeting h2 {
+            margin-bottom: 8px;
+        }
+
+        .greeting p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="screen login-screen active" id="loginScreen">
+            <div class="login-box">
+                <div class="login-icon">💎</div>
+                <h1>The Coach</h1>
+                <p>Tu entrenador personal de salud</p>
+                <input type="text" id="nameInput" class="input-field" placeholder="Ingresa tu nombre" />
+                <button class="btn btn-primary" onclick="startApp()">Comenzar</button>
+            </div>
+        </div>
+
+        <div id="mainApp" style="display: none; flex: 1; display: flex; flex-direction: column;">
+            <div class="header">
+                <h1>The Coach</h1>
+                <div class="nav-buttons">
+                    <button class="nav-btn active" onclick="switchScreen('home')">Inicio</button>
+                    <button class="nav-btn" onclick="switchScreen('progress')">Progreso</button>
+                    <button class="nav-btn" onclick="logout()">Salir</button>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="screen active" id="homeScreen">
+                    <div class="greeting">
+                        <h2>¡Hola, <span id="userName">Usuario</span>! 👋</h2>
+                        <p>Elige un programa y comienza tu entrenamiento</p>
+                    </div>
+                    <div id="programsContainer"></div>
+                </div>
+
+                <div class="screen" id="trainingScreen">
+                    <button class="btn btn-back" onclick="switchScreen('home')">← Volver</button>
+
+                    <div class="training-header">
+                        <h2 id="trainingTitle"></h2>
+                        <p id="trainingWeek"></p>
+                        <div class="day-selector" id="daySelector"></div>
+                    </div>
+
+                    <div id="exercisesContainer"></div>
+
+                    <button id="completeBtn" class="btn btn-primary" style="display: none; margin-top: 20px;" onclick="completeSession()">Completar Sesión</button>
+                </div>
+
+                <div class="screen" id="progressScreen">
+                    <div class="progress-stats" id="statsContainer"></div>
+                    <div class="greeting">
+                        <h2>¡Vas muy bien! 🚀</h2>
+                        <p id="motivationalMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="exerciseModal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <div class="modal-description" id="modalDescription"></div>
+
+            <div class="cycles-section">
+                <h3>⏱️ Ciclos de Trabajo y Descanso</h3>
+                <div id="cyclesContainer"></div>
+            </div>
+
+            <div class="timer-box">
+                <div class="timer-label">Temporizador</div>
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div class="timer-buttons">
+                    <button class="timer-btn" onclick="startTimer()">Iniciar</button>
+                    <button class="timer-btn" onclick="pauseTimer()">Pausar</button>
+                    <button class="timer-btn" onclick="resetTimer()">Reiniciar</button>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value" id="modalSets"></div>
+                    <div class="stat-label">Series</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="modalCycles"></div>
+                    <div class="stat-label">Ciclos</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="modalTotal"></div>
+                    <div class="stat-label">Total</div>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn btn-primary" id="modalCompleteBtn" onclick="toggleExerciseDone()">Marcar completado</button>
+                <button class="btn" style="background: #e5e7eb; color: #333;" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const state = {
+            user: null,
+            program: null,
+            week: 1,
+            day: 1,
+            completed: {},
+            stats: {
+                sessions: 0,
+                streak: 0,
+                programs: 0,
+                lastDate: null
+            }
+        };
+
+        const exercises = {
+            'Contracción Básica': { desc: 'Contrae los músculos pélvicos', sets: 3, work: 5, rest: 5, cycles: 10 },
+            'Respiración Diafragmática': { desc: 'Respira desde el diafragma', sets: 3, work: 0, rest: 0, cycles: 8 },
+            'Relajación': { desc: 'Relaja los músculos pélvicos', sets: 3, work: 0, rest: 0, cycles: 10 },
+            'Series Lentas': { desc: 'Contracciones lentas', sets: 3, work: 8, rest: 8, cycles: 8 },
+            'Hold 5 Segundos': { desc: 'Mantén 5 segundos', sets: 3, work: 5, rest: 10, cycles: 10 },
+            'Recuperación': { desc: 'Descanso activo', sets: 1, work: 0, rest: 0, cycles: 1 },
+            'Contracciones Rápidas': { desc: 'Contracciones rápidas', sets: 3, work: 1, rest: 1, cycles: 20 },
+            'Hold Alternado': { desc: 'Hold largo y rápido', sets: 3, work: 5, rest: 5, cycles: 8 },
+            'Integración': { desc: 'Integra todo lo aprendido', sets: 2, work: 5, rest: 5, cycles: 12 },
+            'Contracción Larga': { desc: 'Mantén hasta 10 segundos', sets: 3, work: 10, rest: 5, cycles: 5 },
+            'Ritmo Mixto': { desc: 'Combina rápido y lento', sets: 3, work: 3, rest: 3, cycles: 10 },
+            'Enfriamiento': { desc: 'Relajación profunda', sets: 1, work: 0, rest: 0, cycles: 1 },
+            'Respiración Profunda': { desc: 'Respiración abdominal', sets: 2, work: 0, rest: 0, cycles: 12 },
+            'Contracción Base': { desc: 'Contracción básica', sets: 3, work: 5, rest: 5, cycles: 10 },
+            'Mindfulness': { desc: 'Práctica de mindfulness', sets: 1, work: 0, rest: 0, cycles: 1 },
+            'Kegel Progresivo': { desc: 'Kegel progresivo', sets: 4, work: 5, rest: 5, cycles: 12 },
+            'Pausa Hold': { desc: 'Técnica de pausa', sets: 3, work: 8, rest: 8, cycles: 8 },
+            'Relajación Guiada': { desc: 'Meditación guiada', sets: 1, work: 0, rest: 0, cycles: 1 },
+            'Series Combinadas': { desc: 'Combina contracciones', sets: 3, work: 5, rest: 5, cycles: 10 },
+            'Control Total': { desc: 'Control absoluto', sets: 3, work: 5, rest: 5, cycles: 12 },
+            'Mantenimiento': { desc: 'Mantén ganancias', sets: 2, work: 5, rest: 5, cycles: 10 },
+            'Técnicas Avanzadas': { desc: 'Técnicas avanzadas', sets: 3, work: 5, rest: 5, cycles: 15 },
+            'Ejercicios Base': { desc: 'Fundamentos', sets: 3, work: 5, rest: 5, cycles: 15 },
+            'Kegel Intenso': { desc: 'Kegel intenso', sets: 4, work: 5, rest: 5, cycles: 20 },
+            'Resistencia': { desc: 'Entrena resistencia', sets: 3, work: 10, rest: 5, cycles: 8 },
+            'Entrenamiento Completo': { desc: 'Sesión completa', sets: 4, work: 5, rest: 5, cycles: 15 },
+            'Hold Máximo': { desc: 'Hold al máximo', sets: 1, work: 0, rest: 0, cycles: 1 },
+            'Ritmo Variado': { desc: 'Varía ritmo', sets: 3, work: 3, rest: 3, cycles: 12 },
+            'Desafío Semanal': { desc: 'Prueba tus límites', sets: 4, work: 5, rest: 5, cycles: 20 },
+            'Test de Fuerza': { desc: 'Mide tu fuerza', sets: 1, work: 0, rest: 0, cycles: 1 },
+            'Control Avanzado': { desc: 'Control avanzado', sets: 3, work: 5, rest: 5, cycles: 12 },
+            'Series Largas': { desc: 'Series largas', sets: 3, work: 5, rest: 5, cycles: 15 }
+        };
+
+        const programs = [
+            {
+                id: 1,
+                name: 'Last Longer Protocol',
+                subtitle: 'Durabilidad e Intimidad',
+                icon: '⏱️',
+                color: 'blue',
+                weeks: 8,
+                schedule: {
+                    1: ['Contracción Básica', 'Respiración Diafragmática', 'Relajación'],
+                    2: ['Series Lentas', 'Hold 5 Segundos', 'Recuperación'],
+                    3: ['Contracciones Rápidas', 'Hold Alternado', 'Integración'],
+                    4: ['Contracción Larga', 'Ritmo Mixto', 'Enfriamiento'],
+                    5: ['Contracción Básica', 'Series Lentas', 'Relajación'],
+                    6: ['Contracciones Rápidas', 'Hold Alternado', 'Integración'],
+                    7: null
+                }
+            },
+            {
+                id: 2,
+                name: 'ED Protocol',
+                subtitle: 'Recuperación Natural',
+                icon: '💪',
+                color: 'purple',
+                weeks: 12,
+                schedule: {
+                    1: ['Respiración Profunda', 'Contracción Base', 'Mindfulness'],
+                    2: ['Kegel Progresivo', 'Pausa Hold', 'Relajación Guiada'],
+                    3: ['Series Combinadas', 'Control Total', 'Integración'],
+                    4: ['Mantenimiento', 'Técnicas Avanzadas', 'Recuperación'],
+                    5: ['Respiración Profunda', 'Contracción Base', 'Relajación'],
+                    6: ['Kegel Progresivo', 'Pausa Hold', 'Integración'],
+                    7: null
+                }
+            },
+            {
+                id: 3,
+                name: 'Testosterone Boost',
+                subtitle: 'Potencia Máxima',
+                icon: '🔥',
+                color: 'orange',
+                weeks: 12,
+                schedule: {
+                    1: ['Ejercicios Base', 'Kegel Intenso', 'Resistencia'],
+                    2: ['Entrenamiento Completo', 'Series Largas', 'Hold Máximo'],
+                    3: ['Ritmo Variado', 'Control Avanzado', 'Recuperación'],
+                    4: ['Desafío Semanal', 'Test de Fuerza', 'Enfriamiento'],
+                    5: ['Ejercicios Base', 'Kegel Intenso', 'Relajación'],
+                    6: ['Entrenamiento Completo', 'Series Largas', 'Integración'],
+                    7: null
+                }
+            }
+        ];
+
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let currentExercise = null;
+        let timerMode = 'work'; // 'work' o 'rest'
+
+        function init() {
+            const saved = localStorage.getItem('coach');
+            if (saved) {
+                Object.assign(state, JSON.parse(saved));
+                showMainApp();
+            }
+        }
+
+        function save() {
+            localStorage.setItem('coach', JSON.stringify(state));
+        }
+
+        function startApp() {
+            const name = document.getElementById('nameInput').value.trim();
+            if (!name) {
+                alert('Por favor ingresa tu nombre');
+                return;
+            }
+            state.user = { name };
+            save();
+            showMainApp();
+        }
+
+        function showMainApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+            document.getElementById('userName').textContent = state.user.name;
+            renderHome();
+        }
+
+        function switchScreen(screen) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screen + 'Screen').classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (screen === 'progress') renderProgress();
+            if (screen === 'home') renderHome();
+        }
+
+        function renderHome() {
+            const html = programs.map(p => `
+                <div class="program-card ${p.color}" onclick="selectProgram(${p.id})">
+                    <div class="program-icon">${p.icon}</div>
+                    <h3>${p.name}</h3>
+                    <p>${p.subtitle}</p>
+                </div>
+            `).join('');
+            document.getElementById('programsContainer').innerHTML = html;
+        }
+
+        function selectProgram(id) {
+            state.program = programs.find(p => p.id === id);
+            state.week = 1;
+            state.day = 1;
+            state.completed = {};
+            save();
+            renderTraining();
+            switchToTraining();
+        }
+
+        function switchToTraining() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('trainingScreen').classList.add('active');
+        }
+
+        function renderTraining() {
+            const p = state.program;
+            document.getElementById('trainingTitle').textContent = p.name;
+            document.getElementById('trainingWeek').textContent = `Semana ${state.week} de ${p.weeks}`;
+
+            const daysHtml = [1,2,3,4,5,6,7].map(d => {
+                const isRest = p.schedule[d] === null;
+                const isActive = state.day === d;
+                return `
+                    <button class="day-btn ${isActive ? 'active' : ''} ${isRest ? 'rest' : ''}" 
+                            onclick="selectDay(${d})"
+                            title="${isRest ? 'Descanso' : 'Entrenamiento'}">
+                        ${isRest ? '😴' : d}
+                    </button>
+                `;
+            }).join('');
+            document.getElementById('daySelector').innerHTML = daysHtml;
+
+            renderExercises();
+        }
+
+        function selectDay(day) {
+            state.day = day;
+            save();
+            renderExercises();
+        }
+
+        function renderExercises() {
+            const p = state.program;
+            const exList = p.schedule[state.day];
+
+            let html = '';
+
+            if (exList === null) {
+                html = `
+                    <div class="rest-day">
+                        <h3>😴 Día de Descanso</h3>
+                        <p>Hoy es tu día de descanso. Recupérate bien para mañana.</p>
+                    </div>
+                `;
+            } else {
+                html = exList.map(ex => `
+                    <div class="exercise-card ${state.completed[ex] ? 'completed' : ''}" onclick="showExerciseDetail('${ex}')">
+                        <button class="exercise-check" onclick="event.stopPropagation(); toggleEx('${ex}')">
+                            ${state.completed[ex] ? '✓' : ''}
+                        </button>
+                        <div class="exercise-info">
+                            <h4>${ex}</h4>
+                            <p>${exercises[ex].desc}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('exercisesContainer').innerHTML = html;
+
+            const allDone = exList && exList.every(ex => state.completed[ex]);
+            document.getElementById('completeBtn').style.display = (allDone && exList) ? 'block' : 'none';
+        }
+
+        function toggleEx(ex) {
+            state.completed[ex] = !state.completed[ex];
+            save();
+            renderExercises();
+            if (currentExercise === ex) showExerciseDetail(ex);
+        }
+
+        function showExerciseDetail(ex) {
+            currentExercise = ex;
+            const data = exercises[ex];
+            document.getElementById('modalTitle').textContent = ex;
+            document.getElementById('modalDescription').textContent = data.desc;
+            document.getElementById('modalSets').textContent = data.sets;
+            document.getElementById('modalCycles').textContent = data.cycles;
+            document.getElementById('modalTotal').textContent = data.sets * data.cycles;
+            
+            let cyclesHtml = '';
+            if (data.work > 0 || data.rest > 0) {
+                const cycleTime = (data.work + data.rest) * data.cycles;
+                const totalTime = cycleTime * data.sets;
+                
+                cyclesHtml = `
+                    <div style="margin-bottom: 12px;">
+                        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <div style="flex: 1; background: #dbeafe; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 18px; font-weight: bold; color: #1e40af;">${data.work}s</div>
+                                <div style="font-size: 12px; color: #1e40af; margin-top: 4px;">Trabajo</div>
+                            </div>
+                            <div style="flex: 1; background: #fed7aa; padding: 12px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 18px; font-weight: bold; color: #92400e;">${data.rest}s</div>
+                                <div style="font-size: 12px; color: #92400e; margin-top: 4px;">Descanso</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: white; border: 2px solid #3b82f6; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <div style="font-size: 13px; color: #333; font-weight: bold; margin-bottom: 8px;">Por Ciclo:</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                                <div style="background: #dbeafe; padding: 8px; border-radius: 6px; text-align: center; font-size: 11px;">
+                                    <div style="font-weight: bold; color: #1e40af;">${data.work}s</div>
+                                    <div style="color: #1e40af;">Trabajo</div>
+                                </div>
+                                <div style="background: #fed7aa; padding: 8px; border-radius: 6px; text-align: center; font-size: 11px;">
+                                    <div style="font-weight: bold; color: #92400e;">${data.rest}s</div>
+                                    <div style="color: #92400e;">Descanso</div>
+                                </div>
+                                <div style="background: #f3f4f6; padding: 8px; border-radius: 6px; text-align: center; font-size: 11px;">
+                                    <div style="font-weight: bold; color: #666;">${data.work + data.rest}s</div>
+                                    <div style="color: #666;">Total</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f0fdf4; border: 2px solid #22c55e; padding: 12px; border-radius: 8px;">
+                            <div style="font-size: 13px; color: #166534; font-weight: bold; margin-bottom: 8px;">Totales:</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <div>
+                                    <div style="font-size: 12px; color: #666;">Por Serie</div>
+                                    <div style="font-size: 14px; font-weight: bold; color: #16a34a;">${cycleTime}s (${Math.floor(cycleTime/60)}:${String(cycleTime%60).padStart(2, '0')})</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 12px; color: #666;">Total (${data.sets} series)</div>
+                                    <div style="font-size: 14px; font-weight: bold; color: #16a34a;">${totalTime}s (${Math.floor(totalTime/60)}:${String(totalTime%60).padStart(2, '0')})</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 8px; font-size: 11px; color: #666;">
+                                ${data.cycles} ciclos × (${data.work}s trabajo + ${data.rest}s descanso) × ${data.sets} series
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                cyclesHtml = `
+                    <div style="background: white; border: 2px solid #e5e7eb; padding: 16px; border-radius: 8px; text-align: center; color: #666; font-size: 14px;">
+                        Este ejercicio no tiene ciclos de trabajo/descanso específicos
+                    </div>
+                `;
+            }
+            document.getElementById('cyclesContainer').innerHTML = cyclesHtml;
+
+            document.getElementById('modalCompleteBtn').textContent = state.completed[ex] ? 'Marcar incompleto' : 'Marcar completado';
+            document.getElementById('exerciseModal').classList.add('active');
+            resetTimer();
+        }
+
+        function closeModal() {
+            document.getElementById('exerciseModal').classList.remove('active');
+            currentExercise = null;
+        }
+
+        function toggleExerciseDone() {
+            toggleEx(currentExercise);
+            closeModal();
+        }
+
+        function completeSession() {
+            state.stats.sessions++;
+            state.stats.streak++;
+            state.stats.lastDate = new Date().toISOString();
+
+            if (state.day < 7) {
+                state.day++;
+            } else if (state.week < state.program.weeks) {
+                state.week++;
+                state.day = 1;
+            } else {
+                state.stats.programs++;
+                state.program = null;
+            }
+            state.completed = {};
+            save();
+
+            if (!state.program) {
+                switchScreen('home');
+                renderHome();
+            } else {
+                renderTraining();
+            }
+        }
+
+        function renderProgress() {
+            const html = `
+                <div class="stat-card">
+                    <div class="number">${state.stats.sessions}</div>
+                    <div class="label">Sesiones</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">${state.stats.streak}</div>
+                    <div class="label">Racha</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">${state.stats.programs}</div>
+                    <div class="label">Programas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">${state.stats.lastDate ? new Date(state.stats.lastDate).toLocaleDateString('es-ES').substring(0, 5) : '—'}</div>
+                    <div class="label">Última sesión</div>
+                </div>
+            `;
+            document.getElementById('statsContainer').innerHTML = html;
+            document.getElementById('motivationalMessage').textContent = state.stats.sessions > 0 
+                ? `Has completado ${state.stats.sessions} sesión${state.stats.sessions !== 1 ? 'es' : ''}. ¡Continúa!`
+                : 'Comienza tu primer sesión para iniciar tu transformación.';
+        }
+
+        function logout() {
+            if (confirm('¿Seguro que quieres salir?')) {
+                localStorage.removeItem('coach');
+                location.reload();
+            }
+        }
+
+        function startTimer() {
+            if (!timerInterval && currentExercise) {
+                const data = exercises[currentExercise];
+                const cycleTime = data.work + data.rest;
+                
+                if (timerSeconds === 0) {
+                    timerMode = 'work';
+                }
+
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    
+                    const cyclePosition = timerSeconds % cycleTime;
+                    if (cyclePosition <= data.work) {
+                        timerMode = 'work';
+                    } else {
+                        timerMode = 'rest';
+                    }
+                    
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerSeconds = 0;
+            timerMode = 'work';
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timerSeconds / 60);
+            const s = timerSeconds % 60;
+            const display = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            
+            const timerBox = document.querySelector('.timer-box');
+            const timerDisplayEl = document.getElementById('timerDisplay');
+            
+            if (currentExercise) {
+                const data = exercises[currentExercise];
+                
+                if (timerMode === 'work') {
+                    timerBox.style.background = 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)';
+                    timerDisplayEl.innerHTML = display + '<div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">💪 TRABAJO</div>';
+                } else {
+                    timerBox.style.background = 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)';
+                    timerDisplayEl.innerHTML = display + '<div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">😤 DESCANSO</div>';
+                }
+            } else {
+                timerBox.style.background = 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)';
+                timerDisplayEl.textContent = display;
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
